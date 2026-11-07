@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071a23">
+  <title>潮渊 · TIDEBORN — 鲸蓝之誓</title>
+  <meta name="description" content="蓝发鲸鱼女仆的深海试炼。一款可离线游玩的高难度 3D 动作 Boss 战游戏。">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="scene" aria-label="潮渊 3D 游戏场景"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div id="hit-flash" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="潮渊首页"><svg viewBox="0 0 48 30" aria-hidden="true"><path d="M3 15c7 1 8-8 17-8 9 0 13 8 16 7l8-6-1 9 3 6-10-3c-8 12-29 9-33-5Z"/><path d="M18 6 25 1l3 7M14 17h1"/></svg><span>TIDEBORN</span><i></i><small>潮渊</small></a>
+    <div class="top-right"><span class="chapter">第一章 <b>/</b> 沉没的圣所</span><button id="sound-btn" class="icon-button" title="切换声音 [M]" aria-label="切换声音">♫</button><button id="help-btn" class="icon-button" title="操作指南" aria-label="操作指南">?</button><button id="pause-btn" class="icon-button" title="暂停 [Esc]" aria-label="暂停游戏">Ⅱ</button></div>
+  </header>
+
+  <main id="landing" class="landing">
+    <div class="intro">
+      <div class="eyebrow"><span></span> A SOULS-LIKE UNDER THE SEA</div>
+      <h1>潮<span>渊</span></h1>
+      <div class="subtitle">鲸 蓝 之 誓</div>
+      <p class="intro-copy">当最后一束光沉入海底，<br>仍有一位女仆，执剑向深渊。</p>
+      <button id="start-btn" class="primary-button"><span>踏入深渊</span><span class="button-arrow">↗</span></button>
+      <div class="start-note"><span class="tiny-diamond"></span> 高难度试炼 · 每一次倒下，都更接近黎明</div>
+    </div>
+    <aside class="lore"><div class="lore-line"></div><div class="eyebrow">THE FIRST GUARDIAN</div><h2>溺誓者 · 赫洛斯</h2><p>昔日守护圣所的骑士，<br>如今只记得潮汐的愤怒。</p><div class="lore-bottom"><span>威胁等级</span><b>Ⅳ</b><span class="difficulty">◆ ◆ ◆ ◆ ◇</span></div></aside>
+    <footer class="landing-footer"><span>01 <i>/</i> THE DROWNED SANCTUM</span><span>DeepSeek 鲸鱼女仆 · 同人创作</span><span class="footer-right"><span class="status-dot"></span> 本地离线可玩</span></footer>
+  </main>
+
+  <section id="hud" hidden aria-label="战斗状态">
+    <div class="player-status">
+      <div class="player-emblem">◈</div><div class="status-content"><div class="player-name">汐 <span>DEEPSEEK</span></div><div class="meter health"><div id="hp-fill"></div></div><div class="meter stamina"><div id="stamina-fill"></div></div><div class="status-values"><span id="hp-text">100 / 100</span><span id="stamina-text">体力 100</span></div></div>
+    </div>
+    <div class="location"><span>THE DROWNED SANCTUM</span><h2>沉没的圣所</h2><div>— 深度 2,740 米 —</div></div>
+    <div id="target-label" class="target-label">◈ 已锁定</div>
+    <div id="boss-warning" class="boss-warning" hidden><div><strong id="boss-warning-text"></strong><span id="boss-warning-time"></span></div><div class="windup-meter"><i id="windup-fill"></i></div></div>
+    <div id="combat-hint" class="combat-hint"></div>
+    <div class="equipment"><div class="equipment-slot sword-slot"><span>♜</span><small>潮汐之刃</small></div><button id="heal-btn" class="equipment-slot flask-slot" title="饮用潮露 [Q]"><span>♜</span><b id="flask-count">3</b><small>Q · 潮露</small></button><div class="equipment-caption">潮起之前，请保留一次翻滚的体力。</div></div>
+    <div id="boss-hud" class="boss-hud"><div class="boss-title"><span>溺誓者 · 赫洛斯</span><small id="boss-phase">THE OATHBOUND</small></div><div class="boss-meter"><div id="boss-trail"></div><div id="boss-fill"></div></div><div class="boss-under"><span id="boss-hp-text">1,200 / 1,200</span><span id="boss-action">潮声正在苏醒</span></div></div>
+    <div class="quick-controls"><span><kbd>W A S D</kbd> 移动</span><span><kbd>J / 鼠标左键</kbd> 轻击</span><span><kbd>K / 右键</kbd> 重击</span><span><kbd>空格</kbd> 翻滚</span><span><kbd>E</kbd> 弹反</span><span><kbd>Tab</kbd> 锁定</span></div>
+    <div class="run-stats"><span id="elapsed">00:00</span><span>死亡 <b id="death-count">0</b></span></div>
+  </section>
+
+  <div id="announcement" class="announcement" aria-live="polite"></div>
+  <section id="result" class="overlay" hidden><div class="result-inner"><div id="result-eyebrow" class="eyebrow">THE TIDE WILL REMEMBER</div><h2 id="result-title">誓约破碎</h2><p id="result-copy">深渊带走了你的呼吸，却带不走你的意志。</p><div id="result-stats" class="result-stats"></div><button id="retry-btn" class="primary-button"><span>重燃誓约</span><span>↗</span></button><button id="home-btn" class="text-button">返回圣所</button></div></section>
+  <section id="pause" class="overlay" hidden><div class="pause-inner"><div class="eyebrow">A MOMENT BETWEEN TIDES</div><h2>潮汐暂歇</h2><p>深呼吸。下一剑，会更准确。</p><button id="resume-btn" class="primary-button"><span>继续试炼</span><span>↗</span></button><button id="restart-btn" class="text-button">重新挑战</button><button id="pause-home-btn" class="text-button">返回标题</button></div></section>
+  <section id="help" class="overlay" hidden><div class="help-inner"><div class="eyebrow">KNOW YOUR OATH</div><h2>深渊生存指南</h2><div class="help-grid"><div><kbd>W A S D</kbd><span>移动 · Shift 疾跑</span></div><div><kbd>J / 左键</kbd><span>轻攻击 · 可衔接三连击</span></div><div><kbd>K / 右键</kbd><span>重攻击 · 更高失衡伤害</span></div><div><kbd>空格</kbd><span>翻滚 · 中段无敌，消耗 26 体力</span></div><div><kbd>E</kbd><span>弹反 · 蓝色闪光时挡下近战</span></div><div><kbd>Q</kbd><span>饮用潮露 · 恢复 55 生命，限 3 次</span></div><div><kbd>Tab</kbd><span>切换目标锁定</span></div><div><kbd>方向键 / 鼠标中键拖动</kbd><span>转动视角 · 滚轮调整距离</span></div><div><kbd>Esc / M / F</kbd><span>暂停 / 声音 / 全屏</span></div><div><kbd>R</kbd><span>倒下后重新挑战</span></div></div><p class="help-tip">观察武器的光芒和地面预警：横斩可弹反；砸地与二阶段爆发的圆圈范围固定，只在爆发瞬间判定一次，可走出圆圈或翻滚躲避。冲锋请向侧面闪避。生命低于一半时，守卫将进入第二阶段。攻击与翻滚均会暂停体力恢复，切勿贪刀。</p><p class="help-tip">触屏：左侧圆盘移动，右侧按钮战斗。默认锁定守卫，横屏体验更佳。</p><button id="close-help-btn" class="primary-button"><span>记住誓约</span><span>✓</span></button></div></section>
+  <div id="touch-controls" hidden><div id="joystick"><div id="joystick-knob"></div></div><div class="touch-actions"><button data-action="parry">弹反</button><button data-action="heavy">重击</button><button data-action="heal">潮露</button><button data-action="dodge">翻滚</button><button data-action="light">轻击</button></div></div>
+  <div id="loading"><div class="loading-mark">◈</div><span>潮水正在漫入圣所…</span></div>
+  <div id="error" class="overlay" hidden><div><h2>圣所暂时无法显现</h2><p id="error-text">请使用支持 WebGL 的现代浏览器，并启用硬件加速。</p><button class="primary-button" onclick="location.reload()">重新加载</button></div></div>
+  <script src="vendor/three.min.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
