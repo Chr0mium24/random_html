@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101814">
+  <meta name="description" content="天元·弈境 — 以星辰为子，以天地为盘。拥有史诗特效与四大秘术的五子棋对战游戏。">
+  <title>天元 · 弈境 | 星盘五子棋</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2 2.8 7.2L22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8Z"/><path d="M12 7v10M7 12h10"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M14 2 4 14h7l-1 8L21 9h-8l1-7Z"/></symbol>
+    <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2v20M3.34 7l17.32 10M3.34 17 20.66 7M9 4l3 3 3-3M9 20l3-3 3 3M3.5 10l4-1-1-4M20.5 14l-4 1 1 4M6.5 19l1-4-4-1M17.5 5l-1 4 4 1"/></symbol>
+    <symbol id="i-twin" viewBox="0 0 24 24"><circle cx="8" cy="8" r="5"/><circle cx="16" cy="16" r="5"/><path d="m15 2 2 3 4 1M3 17l2 3 4 1"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="m9 4-6 6 6 6M3 10h11a6 6 0 0 1 0 12"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 2 8M3 3v7h7"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 8a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16v.1"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="m11 4-6 5H2v6h3l6 5V4ZM15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><path d="m10 3-1 3-3 1-3 3 2 3-1 4 4 1 3 3 3-2 4-1 1-4 2-3-3-3-1-3-4-1Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+  </defs></svg>
+  <canvas id="ambient" aria-hidden="true"></canvas>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="app-shell">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="天元弈境首页"><span class="brand-seal">弈</span><span class="brand-name">天元<span class="brand-dot">·</span>弈境<small>THE CELESTIAL GOMOKU</small></span></a>
+      <div class="header-center"><span class="live-dot"></span> 方寸之间，自有天地</div>
+      <nav class="header-actions" aria-label="游戏工具">
+        <button class="text-button" id="helpBtn"><svg><use href="#i-help"/></svg><span>弈境指南</span></button>
+        <span class="header-divider"></span>
+        <button class="icon-button" id="soundBtn" aria-label="开启音效" aria-pressed="false" title="开启音效"><svg><use href="#i-sound"/></svg><span class="sound-slash"></span></button>
+        <button class="icon-button" id="settingsBtn" aria-label="对局设置" title="对局设置"><svg><use href="#i-gear"/></svg></button>
+      </nav>
+    </header>
+
+    <main>
+      <div class="page-heading"><div><div class="eyebrow"><span></span> CELESTIAL ARENA <span></span></div><h1>落子生万象<span>一念定乾坤</span></h1><p>以星辰为子，以天地为盘。在此，开启你的弈道。</p></div><button class="mode-button" id="modeBtn"><span class="mode-icon">✦</span><span id="modeText">人机对弈</span><span class="mode-chevron">⌄</span></button></div>
+
+      <div class="arena-layout">
+        <aside class="left-rail">
+          <section class="player-panel human-panel active-player" id="player1">
+            <div class="panel-topline"><span>执黑 · 先行</span><span class="player-tag" id="tag1">你的回合</span></div>
+            <div class="player-identity"><div class="avatar avatar-human"><span>玄</span><i></i></div><div><h2 id="name1">执棋者</h2><p id="desc1">以心入局，落子无悔</p></div><span class="identity-stone black"></span></div>
+            <div class="energy-heading"><span><i class="energy-spark">✦</i> 星蕴灵力</span><strong><span id="energy1">70</span><small> / 100</small></strong></div>
+            <div class="energy-track"><div id="bar1" style="width:70%"></div></div>
+            <div class="player-stats"><span>棋子 <b id="stones1">0</b></span><span>秘术 <b id="casts1">0</b></span></div>
+          </section>
+
+          <section class="insight-panel"><div class="section-label"><span>弈 道 心 法</span><svg><use href="#i-star"/></svg></div><p id="wisdom">善弈者谋势，<br>不善弈者谋子。</p><div class="wisdom-line"></div><span id="wisdomNote">攻守之间，自有章法</span><div class="mini-constellation" aria-hidden="true"><svg viewBox="0 0 200 85"><path d="m20 62 40-37 38 31 42-40 36 42M60 25l80-9M98 56l78 2"/><g><circle cx="20" cy="62" r="2"/><circle cx="60" cy="25" r="3"/><circle cx="98" cy="56" r="2"/><circle cx="140" cy="16" r="3"/><circle cx="176" cy="58" r="2"/></g></svg></div></section>
+          <div class="rules-note"><span>✧</span><p>纵横连成五子，即可问鼎。<br>善用秘术，逆转每一场棋局。</p></div>
+        </aside>
+
+        <section class="board-panel" aria-label="五子棋对战区域">
+          <div class="board-toolbar"><div class="board-status"><span class="live-dot"></span><span id="turnStatus" aria-live="polite">静待落子</span></div><div class="round-label">回合 <strong id="roundNumber">01</strong><span class="toolbar-separator"></span><span id="timer">00:00</span></div></div>
+          <div class="board-stage" id="boardStage">
+            <div class="orbit orbit-one" aria-hidden="true"></div><div class="orbit orbit-two" aria-hidden="true"></div>
+            <span class="frame-corner tl"></span><span class="frame-corner tr"></span><span class="frame-corner bl"></span><span class="frame-corner br"></span>
+            <canvas id="board" tabindex="0" aria-label="15乘15五子棋棋盘，方向键选择位置，回车落子"></canvas>
+            <canvas id="effects" aria-hidden="true"></canvas>
+            <div class="skill-announcement" id="skillAnnouncement" aria-hidden="true"><span></span><strong></strong><small></small></div>
+            <div class="target-banner" id="targetBanner" hidden><span id="targetText"></span><button id="cancelSkill" aria-label="取消技能">取消 <kbd>ESC</kbd></button></div>
+          </div>
+          <div class="board-footer"><span><i class="small-stone"></i><span id="boardHint">点击星盘交点，落下你的第一颗棋子</span></span><div><button id="undoBtn" class="board-tool" disabled><svg><use href="#i-back"/></svg>悔棋</button><button id="restartBtn" class="board-tool"><svg><use href="#i-reset"/></svg>重开</button></div></div>
+        </section>
+
+        <aside class="right-rail">
+          <section class="player-panel ai-panel" id="player2">
+            <div class="panel-topline"><span>执白 · 后行</span><span class="opponent-tag" id="tag2">天机 · 标准</span></div>
+            <div class="player-identity"><div class="avatar avatar-ai"><span>机</span><i></i></div><div><h2 id="name2">天机</h2><p id="desc2">观星推演，算尽千机</p></div><span class="identity-stone white"></span></div>
+            <div class="energy-heading"><span><i class="energy-spark">✦</i> 星蕴灵力</span><strong><span id="energy2">70</span><small> / 100</small></strong></div>
+            <div class="energy-track"><div id="bar2" style="width:70%"></div></div>
+            <div class="player-stats"><span>棋子 <b id="stones2">0</b></span><span>秘术 <b id="casts2">0</b></span></div>
+          </section>
+
+          <section class="chronicle"><div class="section-label"><span>星 盘 战 报</span><span class="chronicle-label">LIVE</span></div><div class="log-list" id="logList" role="log" aria-live="polite"><div class="log-item log-start"><i>✧</i><div>星盘已启，静候执棋者<small>对局开始</small></div></div></div><div class="log-bottom">每一手，皆是新的可能</div></section>
+        </aside>
+      </div>
+
+      <section class="skills-section" aria-label="战斗技能">
+        <div class="skills-heading"><div><span class="diamond">◇</span><h2>星蕴秘术</h2><span class="skills-subtitle">借天地之力，破方寸之局</span></div><span class="regen-note"><i>✦</i> 每次行动结束恢复 10 灵力 <span>·</span> 每回合限用一术</span></div>
+        <div class="skill-grid">
+          <button class="skill-card thunder" data-skill="thunder" aria-describedby="thunderDesc"><div class="skill-icon"><svg><use href="#i-bolt"/></svg></div><div class="skill-content"><div class="skill-title"><h3>雷霆破阵</h3><kbd>1</kbd></div><p id="thunderDesc">引九天雷霆，击碎一枚敌方棋子</p><div class="skill-meta"><span>✦ <b>45</b> 灵力</span><span>冷却 4 回合</span></div></div><span class="cooldown-badge"></span></button>
+          <button class="skill-card frost" data-skill="frost" aria-describedby="frostDesc"><div class="skill-icon"><svg><use href="#i-snow"/></svg></div><div class="skill-content"><div class="skill-title"><h3>冰封禁域</h3><kbd>2</kbd></div><p id="frostDesc">冰封一处空位，封锁两个轮次</p><div class="skill-meta"><span>✦ <b>35</b> 灵力</span><span>冷却 3 回合</span></div></div><span class="cooldown-badge"></span></button>
+          <button class="skill-card twin" data-skill="twin" aria-describedby="twinDesc"><div class="skill-icon"><svg><use href="#i-twin"/></svg></div><div class="skill-content"><div class="skill-title"><h3>星陨连珠</h3><kbd>3</kbd></div><p id="twinDesc">唤醒星辰之力，一回合连落两子</p><div class="skill-meta"><span>✦ <b>60</b> 灵力</span><span>冷却 5 回合</span></div></div><span class="cooldown-badge"></span></button>
+          <button class="skill-card oracle" data-skill="oracle" aria-describedby="oracleDesc"><div class="skill-icon"><svg><use href="#i-eye"/></svg></div><div class="skill-content"><div class="skill-title"><h3>天机洞察</h3><kbd>4</kbd></div><p id="oracleDesc">窥见星盘脉络，显现最佳落点</p><div class="skill-meta"><span>✦ <b>25</b> 灵力</span><span>冷却 3 回合</span></div></div><span class="cooldown-badge"></span></button>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer"><span>天元 · 弈境 <span class="footer-dot">/</span> THE CELESTIAL GOMOKU</span><span>十五道经纬，万千种可能 <span class="footer-star">✦</span></span></footer>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <dialog id="helpDialog" class="modal"><button class="modal-close icon-button" data-close aria-label="关闭"><svg><use href="#i-cross"/></svg></button><div class="eyebrow">THE ART OF GOMOKU</div><h2>弈境指南</h2><p class="modal-intro">规则很简单，变化无穷尽。</p><div class="guide-rows"><div><span>01</span><p><strong>连五成势</strong>双方轮流行动，黑棋先行。横、竖、斜任意方向率先连成五枚或以上同色棋子即可获胜。本局无禁手。</p></div><div><span>02</span><p><strong>灵力与秘术</strong>双方初始拥有 70 灵力，每次行动结束回复 10，上限 100。每回合限用一次秘术，冷却按施术者之后的行动次数计算。</p></div><div><span>03</span><p><strong>把握时机</strong>雷霆与冰封替代本次落子；连珠可连落两子；洞察后仍可落一子。冰封持续接下来双方各两次行动，期间该点不可落子。</p></div><div><span>04</span><p><strong>随心执棋</strong>数字键 1—4 选择秘术，Esc 取消。方向键移动棋盘光标，Enter 落子。悔棋在人机模式下回退到你上一次行动前，灵力和冷却同时恢复。</p></div></div><button class="primary-button" data-close>入局一弈 <svg><use href="#i-arrow"/></svg></button></dialog>
+
+  <dialog id="settingsDialog" class="modal settings-modal"><button class="modal-close icon-button" data-close aria-label="关闭"><svg><use href="#i-cross"/></svg></button><div class="eyebrow">A NEW CONSTELLATION</div><h2>设定你的弈局</h2><p class="modal-intro">选择对手，落子入境。应用设置将开始新对局。</p><form id="settingsForm"><fieldset><legend>对弈模式</legend><div class="option-grid"><label class="option"><input type="radio" name="mode" value="ai" checked><strong>天机对弈</strong><span>与星盘中的智者切磋</span></label><label class="option"><input type="radio" name="mode" value="local"><strong>双人同屏</strong><span>与身边的好友一决高下</span></label></div></fieldset><fieldset id="difficultyField"><legend>天机棋力</legend><div class="option-grid difficulty-options"><label class="option"><input type="radio" name="difficulty" value="easy"><strong>初见</strong><span>从容入境</span></label><label class="option"><input type="radio" name="difficulty" value="normal" checked><strong>知微</strong><span>攻守有道</span></label><label class="option"><input type="radio" name="difficulty" value="hard"><strong>问鼎</strong><span>步步为营</span></label></div></fieldset><label class="switch-row"><span><strong>秘术对战</strong><small>关闭后体验传统五子棋</small></span><input type="checkbox" name="skills" checked><span class="switch-track"></span></label><label class="switch-row"><span><strong>氛围特效</strong><small>星尘、落子涟漪与秘术动画</small></span><input type="checkbox" name="effects" checked><span class="switch-track"></span></label><button class="primary-button" type="submit">开启新局 <svg><use href="#i-arrow"/></svg></button></form></dialog>
+
+  <dialog id="confirmDialog" class="modal compact-modal"><div class="eyebrow">A FRESH BEGINNING</div><h2>重启星盘？</h2><p class="modal-intro">当前棋局将被清空，重新开始一场对弈。</p><div class="dialog-actions"><button class="secondary-button" data-close>继续对弈</button><button class="primary-button" id="confirmRestart">重新开始</button></div></dialog>
+
+  <dialog id="resultDialog" class="modal result-modal"><button class="modal-close icon-button" data-close aria-label="关闭"><svg><use href="#i-cross"/></svg></button><div class="result-emblem">✦</div><div class="eyebrow" id="resultEyebrow">CONSTELLATION COMPLETE</div><h2 id="resultTitle">星河为你加冕</h2><p class="modal-intro" id="resultText"></p><div class="result-stats"><span>对弈回合<strong id="resultRounds"></strong></span><span>秘术施展<strong id="resultCasts"></strong></span><span>弈局用时<strong id="resultTime"></strong></span></div><button class="primary-button" id="playAgain">再赴一局 <svg><use href="#i-arrow"/></svg></button><button class="result-review" data-close>留在星盘，回味此局</button></dialog>
+  <script src="engine.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

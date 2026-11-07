@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#10151b">
+  <title>NEURAL CLASH · 深海与余烬</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Neural Clash 首页"><span class="brand-symbol">N<span>／</span>C</span><span class="brand-name">NEURAL CLASH<small>深 海 与 余 烬</small></span></a>
+      <div class="edition"><i></i> EXHIBITION MATCH <span>VOL. 01</span></div>
+      <nav class="utilities" aria-label="游戏设置">
+        <button id="helpButton" title="招式与操作（?）">操作指南 <span>↗</span></button>
+        <button id="soundButton" aria-label="开启声音" title="声音">声音 OFF</button>
+        <button id="fullscreenButton" aria-label="切换全屏" title="全屏">⛶</button>
+      </nav>
+    </header>
+
+    <section class="arena" aria-label="2D 格斗场景">
+      <canvas id="game" width="1440" height="760" aria-label="深海鲸鱼娘与橙发少女格斗游戏"></canvas>
+      <div class="arena-vignette"></div>
+      <div class="battle-hud">
+        <div class="fighter-info blue">
+          <div class="fighter-label"><span class="player-tag">P1</span><strong>DEEPSEEK<span>鲸鱼娘</span></strong><div class="rounds" id="rounds1"><i></i><i></i></div></div>
+          <div class="health-frame"><div class="health-trail" id="trail1"></div><div class="health" id="health1"></div><span></span></div>
+          <div class="health-meta"><span>ABYSSAL RESONANCE</span><span id="hp1">420 / 420</span></div>
+        </div>
+        <div class="timer-block"><span id="roundLabel">ROUND 01</span><strong id="timer">99</strong><small>∞ POTENTIAL</small></div>
+        <div class="fighter-info orange">
+          <div class="fighter-label"><div class="rounds" id="rounds2"><i></i><i></i></div><strong>CLAUDE<span>余烬少女</span></strong><span class="player-tag" id="p2Tag">CPU</span></div>
+          <div class="health-frame"><div class="health-trail" id="trail2"></div><div class="health" id="health2"></div><span></span></div>
+          <div class="health-meta"><span id="hp2">420 / 420</span><span>EMBER BLOSSOM</span></div>
+        </div>
+      </div>
+      <div class="stage-caption"><span class="live-dot"></span> THE LIMINAL SHORE <span>境界海岸 · 23:47</span></div>
+      <div class="combo combo-left" id="combo1"></div><div class="combo combo-right" id="combo2"></div>
+      <div class="announcer" id="announcer" role="status" aria-live="polite"></div>
+      <div class="bottom-hud">
+        <div class="resource blue"><div class="resource-label"><b>TENSION</b><span id="meterText1">0%</span></div><div class="meter"><div id="meter1"></div><i></i></div><div class="burst-label"><span id="burst1">● BURST READY</span><small id="state1">NEUTRAL</small></div></div>
+        <div class="stage-mark">N<span>／</span>C<small>DUEL SYSTEM</small></div>
+        <div class="resource orange"><div class="resource-label"><span id="meterText2">0%</span><b>TENSION</b></div><div class="meter"><div id="meter2"></div><i></i></div><div class="burst-label"><small id="state2">NEUTRAL</small><span id="burst2">BURST READY ●</span></div></div>
+      </div>
+
+      <div class="screen-overlay" id="startScreen">
+        <div class="intro-kicker"><span></span> A FAN-MADE FIGHTING EXPERIENCE <span></span></div>
+        <h1>NEURAL<span>CLASH<i>✳</i></span></h1>
+        <p class="intro-subtitle">深海的回响，与余烬交锋。</p>
+        <div class="matchup"><span>DEEPSEEK</span><i>versus</i><span>CLAUDE</span></div>
+        <div class="match-options"><label>对战模式<select id="mode"><option value="cpu">单人 · 挑战 CPU</option><option value="versus">双人 · 本地对战</option><option value="training">训练 · 自由练习</option></select></label><label id="difficultyLabel">CPU 强度<select id="difficulty"><option value="easy">轻松</option><option value="normal" selected>标准</option><option value="hard">挑战</option></select></label></div>
+        <button class="primary-button" id="startButton">开始对决 <span>↗</span></button>
+        <p class="start-hint">W A S D 移动 · J K L U 攻击 · 空格冲刺</p>
+      </div>
+      <div class="screen-overlay hidden pause-screen" id="pauseScreen"><span class="eyebrow">TAKE A BREATH</span><h2 id="pauseTitle">对决暂停</h2><p id="pauseMessage">下一次交锋，由你决定。</p><button class="primary-button" id="resumeButton">继续对决 <span>↗</span></button><button class="text-button" id="restartButton">重新开始</button><button class="text-button" id="menuButton">返回主界面</button></div>
+      <button class="pause-button hidden" id="pauseButton" aria-label="暂停游戏">Ⅱ</button>
+    </section>
+
+    <section class="control-deck" aria-label="操作快捷提示">
+      <div class="deck-title"><span class="eyebrow">KNOW YOUR MOVES</span><h2>每一次输入，都有回响。</h2></div>
+      <div class="key-group"><div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></div><span>移动 / 二段跳 / 下蹲</span></div>
+      <div class="key-group"><div><kbd>J</kbd><kbd>K</kbd><kbd>L</kbd><kbd>U</kbd></div><span>轻拳 / 踢击 / 斩击 / 重击</span></div>
+      <div class="key-group"><div><kbd>O</kbd><kbd>I</kbd><kbd>H</kbd></div><span>波动 / 升龙 / 超必杀</span></div>
+      <div class="key-group"><div><kbd class="wide">SPACE</kbd><kbd>Q</kbd><kbd>E</kbd></div><span>冲刺 / 取消 / 爆发</span></div>
+      <button id="deckHelp" class="deck-help" aria-label="查看全部招式">↗</button>
+    </section>
+    <section class="touch-controls" aria-label="触屏操作">
+      <div class="touch-pad"><button data-code="KeyW" class="touch-up" aria-label="跳跃">↑</button><button data-code="KeyA" aria-label="左移">←</button><button data-code="KeyS" aria-label="下蹲">↓</button><button data-code="KeyD" aria-label="右移">→</button><button data-code="Space" class="touch-dash">冲刺</button></div>
+      <div class="touch-attacks"><button data-code="KeyJ">轻拳</button><button data-code="KeyK">踢击</button><button data-code="KeyL">斩击</button><button data-code="KeyU">重击</button><button data-code="KeyO">波动</button><button data-code="KeyI">升龙</button><button data-code="KeyH">超杀</button><button data-code="KeyQ">取消</button><button data-code="KeyE">爆发</button></div>
+    </section>
+    <footer><span>01 / 境界海岸</span><span>深海蓝 × 余烬橙 <i>✳</i> 原创同人格斗演绎</span><span id="fps">60 FPS</span></footer>
+  </main>
+
+  <dialog id="helpDialog">
+    <div class="dialog-header"><div><span class="eyebrow">THE DUEL MANUAL</span><h2>把本能，变成连段。</h2></div><button id="closeHelp" aria-label="关闭指南">×</button></div>
+    <div class="manual-grid">
+      <section><h3>01 <span>基础操作</span></h3><p><b>W A S D</b> 移动，W 跳跃（可二段跳），S 下蹲。按住远离对手的方向防御；下蹲后退为蹲防，<b>Shift</b> 原地防御。蹲踢需蹲防，空中攻击需站防。</p><p><b>空格</b> 向移动方向冲刺；空中可冲刺一次。<b>Esc</b> 暂停，<b>R</b> 训练重置。</p></section>
+      <section><h3>02 <span>攻击与连段</span></h3><p><b>J → K → L → U</b> 轻拳、踢击、斩击、重击。命中或被防御后可按此顺序取消后摇，再接必杀。空中也能出招。</p><p><b>O</b> 深海脉冲 / 余烬飞星；<b>I</b> 鲸跃升龙 / 日轮上挑；<b>H</b> 沧海鲸鸣 / 烬日绽放，消耗 50% Tension。</p></section>
+      <section><h3>03 <span>扭转战局</span></h3><p><b>Q · 罗曼取消</b> 消耗 50% Tension，取消当前动作，短暂减缓对手，创造连段机会。受击中不可用。</p><p><b>E · 蓝色爆发</b> 爆发槽满时可从受击中脱身，击退近身对手。能量随时间恢复。升龙启动与超杀具有短暂无敌。</p></section>
+      <section><h3>04 <span>第二位玩家</span></h3><p><b>方向键</b> 移动和跳跃；<b>小键盘 1 / 2 / 3 / 4</b> 轻、脚、斩、重；<b>5 / 6 / 0</b> 波动、升龙、超杀。</p><p><b>小键盘 .</b> 冲刺，<b>7</b> 罗曼取消，<b>8</b> 爆发，<b>9</b> 原地防御。手柄：方向键或左摇杆移动，A 跳跃，X/Y/B/RB 攻击，LB 冲刺，LT 波动，RT 升龙；<b>下 + RT</b> 超杀，<b>下 + LB</b> 取消，<b>下 + RB</b> 爆发。训练模式拥有无限 Tension，停止攻击后恢复生命。</p></section>
+    </div><div class="manual-note">先从 J → K → L → O 开始。确认命中、拉近距离，再把连段延伸到空中。</div>
+  </dialog>
+  <script src="game.js"></script>
+</body>
+</html>
